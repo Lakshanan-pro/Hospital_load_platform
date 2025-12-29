@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>User Feedback</title>
+<style>
+body { font-family: Arial, sans-serif; background:#f0f4f7; padding:20px; }
+h1 { color:#007bff; }
+form { background:white; padding:20px; border-radius:10px; box-shadow:0 0 15px rgba(0,0,0,0.2); max-width:400px; margin:auto; }
+input, textarea { width:100%; padding:10px; margin:10px 0; border-radius:5px; border:1px solid #ccc; }
+button { padding:10px 20px; background:#007bff; color:white; border:none; border-radius:5px; cursor:pointer; }
+button:hover { background:#0056b3; }
+</style>
+</head>
+<body>
+<h1>User Feedback</h1>
+<form id="feedbackForm">
+  <label>Hospital ID:</label><br>
+  <input type="number" id="hospitalId" required>
+  <label>Actual Waiting Time (mins):</label><br>
+  <input type="number" id="actualWait" required>
+  <label>Comment:</label><br>
+  <textarea id="comment"></textarea><br><br>
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+const form = document.getElementById("feedbackForm");
+form.addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  const data = {
+    hospital_id: document.getElementById("hospitalId").value,
+    actual_wait: document.getElementById("actualWait").value,
+    comment: document.getElementById("comment").value
+  };
+  const res = await fetch("http://localhost:5000/api/feedback",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify(data)
+  });
+  const resp = await res.json();
+  alert(resp.msg);
+  form.reset();
+});
+</script>
+</body>
+</html>

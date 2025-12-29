@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hospital Staff Dashboard</title>
+<link rel="stylesheet" href="style.css">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.nav {
+  background: white;
+  padding: 15px 30px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+.user-info {
+  color: #666;
+  font-size: 0.9em;
+}
+
+.logout-btn {
+  background: #dc3545;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background 0.3s;
+}
+
+.logout-btn:hover {
+  background: #c82333;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 15px;
+  padding: 40px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 2.5em;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 1.1em;
+}
+
+.hospital-select-section {
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  border-left: 4px solid #667eea;
+}
+
+.hospital-select-section h2 {
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1.3em;
+}
+
+.hospital-select-section p {
+  color: #666;
+  margin-bottom: 20px;
+  font-size: 0.95em;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: 600;
+  font-size: 0.95em;
+}
+
+select, input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1em;
+  font-family: inherit;
+  transition: border-color 0.3s;
+}
+
+select:focus, input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.crowd-levels {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.crowd-option {
+  padding: 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: 600;
+}
+
+.crowd-option:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.crowd-option.selected {
+  border-color: #667eea;
+  background: #667eea;
+  color: white;
+}
+
+.crowd-LOW {
+  border-color: #28a745;
+}
+
+.crowd-LOW.selected {
+  background: #28a745;
+  border-color: #28a745;
+}
+
+.crowd-MEDIUM {
+  border-color: #ffc107;
+}
+
+.crowd-MEDIUM.selected {
+  background: #ffc107;
+  border-color: #ffc107;
+  color: #333;
+}
+
+.crowd-HIGH {
+  border-color: #dc3545;
+}
+
+.crowd-HIGH.selected {
+  background: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-submit, .btn-link {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  margin-top: 20px;
+}
+
+.btn-submit:hover:not(:disabled), .btn-link:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-submit:disabled, .btn-link:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.alert {
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: none;
+}
+
+.alert-success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.current-hospital {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.current-hospital h2 {
+  margin: 0 0 10px 0;
+  font-size: 1.5em;
+}
+
+.current-hospital p {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 1.1em;
+}
+
+.department-status-section {
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 2px solid #e0e0e0;
+}
+
+.department-status-section h2 {
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 1.5em;
+}
+
+.department-status-item {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  border-left: 4px solid #667eea;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.2s;
+}
+
+.department-status-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.department-status-info {
+  flex: 1;
+}
+
+.department-status-name {
+  font-weight: bold;
+  color: #333;
+  font-size: 1.1em;
+  margin-bottom: 8px;
+}
+
+.department-status-details {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.department-status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.85em;
+}
+
+.department-status-badge.LOW {
+  background: #28a745;
+  color: white;
+}
+
+.department-status-badge.MEDIUM {
+  background: #ffc107;
+  color: #333;
+}
+
+.department-status-badge.HIGH {
+  background: #dc3545;
+  color: white;
+}
+
+.department-status-time {
+  color: #666;
+  font-size: 0.9em;
+  text-align: right;
+}
+
+.recent-submissions {
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 2px solid #e0e0e0;
+}
+
+.recent-submissions h2 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 1.5em;
+}
+
+.submission-item {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.2s;
+}
+
+.submission-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.submission-info {
+  flex: 1;
+}
+
+.submission-time {
+  color: #666;
+  font-size: 0.9em;
+}
+
+.hidden {
+  display: none;
+}
+</style>
+</head>
+<body>
+<div class="nav">
+  <div class="nav-left">
+    <a href="index.html">← Home</a>
+    <a href="map.html">Map</a>
+  </div>
+  <div class="nav-right">
+    <span class="user-info" id="userInfo"></span>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+</div>
+
+<div class="container">
+  <h1>🏥 Hospital Staff Dashboard</h1>
+  <p class="subtitle">Update real-time crowd status and waiting times for your hospital</p>
+
+  <div id="alert" class="alert"></div>
+
+  <!-- Current Hospital Display -->
+  <div id="currentHospital" class="current-hospital hidden">
+    <h2 id="currentHospitalName">Hospital Name</h2>
+    <p>You are managing this hospital</p>
+  </div>
+
+  <!-- Update Form (shown only when hospital is assigned) -->
+  <form id="loadForm" class="hidden">
+    <div class="form-group">
+      <label for="department">Department</label>
+      <input 
+        type="text" 
+        id="department" 
+        placeholder="e.g., Emergency, Cardiology, General" 
+        required
+      >
+    </div>
+
+    <div class="form-group">
+      <label>Crowd Level</label>
+      <div class="crowd-levels">
+        <div class="crowd-option crowd-LOW" data-level="LOW">
+          <div>🟢 LOW</div>
+          <small>Light crowd</small>
+        </div>
+        <div class="crowd-option crowd-MEDIUM" data-level="MEDIUM">
+          <div>🟡 MEDIUM</div>
+          <small>Moderate crowd</small>
+        </div>
+        <div class="crowd-option crowd-HIGH" data-level="HIGH">
+          <div>🔴 HIGH</div>
+          <small>Heavy crowd</small>
+        </div>
+      </div>
+      <input type="hidden" id="crowdLevel" required>
+    </div>
+
+    <div class="form-group">
+      <label for="estimatedWait">Estimated Wait Time (minutes)</label>
+      <input 
+        type="number" 
+        id="estimatedWait" 
+        placeholder="e.g., 30" 
+        min="0" 
+        required
+      >
+    </div>
+
+    <button type="submit" class="btn-submit" id="submitBtn">
+      Update Hospital Status
+    </button>
+  </form>
+
+  <div class="department-status-section" id="departmentStatusSection" style="display: none;">
+    <h2>Current Department Status</h2>
+    <p style="color: #666; margin-bottom: 20px; font-size: 0.95em;">Real-time status for all departments in your hospital</p>
+    <div id="departmentStatusList"></div>
+  </div>
+
+  <div class="recent-submissions" id="recentSection" style="display: none;">
+    <h2>Recent Updates</h2>
+    <div id="recentSubmissions"></div>
+  </div>
+</div>
+
+<script>
+// Check authentication
+const userStr = localStorage.getItem("user");
+if (!userStr) {
+  localStorage.removeItem("user"); // Clear any corrupted data
+  window.location.href = "login.html";
+}
+
+let user;
+try {
+  user = JSON.parse(userStr);
+  // Validate user object has required fields
+  if (!user || !user.id || !user.username) {
+    throw new Error("Invalid user data");
+  }
+} catch (err) {
+  console.error("Error parsing user data:", err);
+  localStorage.removeItem("user");
+  window.location.href = "login.html";
+}
+document.getElementById("userInfo").textContent = `Logged in as: ${user.username}`;
+
+let currentHospitalId = user.hospital_id || null;
+let currentHospitalName = user.hospital_name || null;
+
+async function loadHospitalName() {
+  if (currentHospitalName) return currentHospitalName;
+
+  const res = await fetch(`http://localhost:5000/api/hospitals/${currentHospitalId}`);
+  if (!res.ok) throw new Error('Unable to load hospital details');
+  const hospitalData = await res.json();
+  currentHospitalName = hospitalData.name;
+  return currentHospitalName;
+}
+
+// Fetch and display department-wise status from database
+async function loadDepartmentStatus() {
+  if (!currentHospitalId) return;
+
+  try {
+    const res = await fetch(`http://localhost:5000/api/hospitals/${currentHospitalId}`);
+    if (!res.ok) {
+      console.warn('Could not fetch department status');
+      return;
+    }
+
+    const hospitalData = await res.json();
+    const departments = hospitalData.departments || [];
+    const statusSection = document.getElementById('departmentStatusSection');
+    const statusList = document.getElementById('departmentStatusList');
+
+    if (departments.length === 0) {
+      statusSection.style.display = 'none';
+      return;
+    }
+
+    statusSection.style.display = 'block';
+    statusList.innerHTML = '';
+
+    departments.forEach(dept => {
+      const item = document.createElement('div');
+      item.className = 'department-status-item';
+
+      const waitText = dept.estimated_wait !== null && dept.estimated_wait !== undefined 
+        ? `${dept.estimated_wait} mins` 
+        : 'Not Available';
+
+      const lastUpdated = dept.last_updated 
+        ? new Date(dept.last_updated).toLocaleString() 
+        : 'Not available';
+
+      item.innerHTML = `
+        <div class="department-status-info">
+          <div class="department-status-name">${dept.name}</div>
+          <div class="department-status-details">
+            <span class="department-status-badge ${dept.crowd_level}">${dept.crowd_level}</span>
+            <span style="color: #666;">Wait Time: ${waitText}</span>
+          </div>
+        </div>
+        <div class="department-status-time">
+          <div>Updated:</div>
+          <div style="font-weight: 500; margin-top: 4px;">${lastUpdated}</div>
+        </div>
+      `;
+
+      statusList.appendChild(item);
+    });
+  } catch (err) {
+    console.error('Error loading department status:', err);
+    // Don't show error to user, just hide the section
+    document.getElementById('departmentStatusSection').style.display = 'none';
+  }
+}
+
+// Setup dashboard based on hospital assignment
+async function setupDashboard() {
+  if (!currentHospitalId) {
+    showAlert('No hospital linked to your account. Please register again with the correct hospital name.', 'error');
+    document.getElementById('loadForm').classList.add('hidden');
+    document.getElementById('currentHospital').classList.add('hidden');
+    return;
+  }
+
+  try {
+    await loadHospitalName();
+    document.getElementById('currentHospitalName').textContent = currentHospitalName;
+    document.getElementById('currentHospital').classList.remove('hidden');
+    document.getElementById('loadForm').classList.remove('hidden');
+    
+    // Load department-wise status from database
+    await loadDepartmentStatus();
+  } catch (err) {
+    console.error('Error loading hospital name:', err);
+    showAlert('Error loading hospital information', 'error');
+    document.getElementById('loadForm').classList.add('hidden');
+  }
+}
+
+// Handle crowd level selection
+document.querySelectorAll('.crowd-option').forEach(option => {
+  option.addEventListener('click', () => {
+    document.querySelectorAll('.crowd-option').forEach(o => o.classList.remove('selected'));
+    option.classList.add('selected');
+    document.getElementById('crowdLevel').value = option.dataset.level;
+  });
+});
+
+// Handle form submission
+document.getElementById('loadForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  if (!currentHospitalId) {
+    showAlert('No hospital linked to your account.', 'error');
+    return;
+  }
+
+  const department = document.getElementById('department').value;
+  const crowdLevel = document.getElementById('crowdLevel').value;
+  const estimatedWait = document.getElementById('estimatedWait').value;
+
+  if (!crowdLevel) {
+    showAlert('Please select a crowd level', 'error');
+    return;
+  }
+
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Submitting...';
+
+  try {
+    const res = await fetch(`http://localhost:5000/api/hospitals/${currentHospitalId}/load`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        department,
+        crowd_level: crowdLevel,
+        estimated_wait: parseInt(estimatedWait),
+        user_id: user.id
+      })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      showAlert(`Successfully updated ${department} department status!`, 'success');
+      
+      // Refresh department status from database after successful update
+      await loadDepartmentStatus();
+      
+      // Add to recent submissions
+      addRecentSubmission({
+        hospital: currentHospitalName,
+        department,
+        crowdLevel,
+        estimatedWait,
+        time: new Date()
+      });
+
+      // Reset form
+      document.getElementById('department').value = '';
+      document.getElementById('estimatedWait').value = '';
+      document.querySelectorAll('.crowd-option').forEach(o => o.classList.remove('selected'));
+      document.getElementById('crowdLevel').value = '';
+    } else {
+      showAlert(data.msg || 'Error updating hospital status', 'error');
+    }
+  } catch (err) {
+    console.error('Error submitting data:', err);
+    showAlert('Error connecting to server. Please check if the backend is running.', 'error');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Update Hospital Status';
+  }
+});
+
+function showAlert(message, type) {
+  const alert = document.getElementById('alert');
+  alert.className = `alert alert-${type}`;
+  alert.textContent = message;
+  alert.style.display = 'block';
+  
+  setTimeout(() => {
+    alert.style.display = 'none';
+  }, 5000);
+}
+
+function addRecentSubmission(submission) {
+  const recentSection = document.getElementById('recentSection');
+  const recentSubmissions = document.getElementById('recentSubmissions');
+  
+  recentSection.style.display = 'block';
+  
+  const item = document.createElement('div');
+  item.className = 'submission-item';
+  item.innerHTML = `
+    <div class="submission-info">
+      <strong>${submission.hospital}</strong> - ${submission.department}<br>
+      <span class="crowd-badge crowd-${submission.crowdLevel}" style="display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.85em; margin-top: 5px; background: ${submission.crowdLevel === 'LOW' ? '#28a745' : submission.crowdLevel === 'MEDIUM' ? '#ffc107' : '#dc3545'}; color: ${submission.crowdLevel === 'MEDIUM' ? '#333' : 'white'};">
+        ${submission.crowdLevel} • ${submission.estimatedWait} mins wait
+      </span>
+    </div>
+    <div class="submission-time">
+      ${submission.time.toLocaleTimeString()}
+    </div>
+  `;
+  
+  recentSubmissions.insertBefore(item, recentSubmissions.firstChild);
+  
+  // Keep only last 5 submissions
+  while (recentSubmissions.children.length > 5) {
+    recentSubmissions.removeChild(recentSubmissions.lastChild);
+  }
+}
+
+function logout() {
+  localStorage.removeItem("user");
+  window.location.href = "index.html";
+}
+
+// Initialize on page load
+setupDashboard();
+</script>
+</body>
+</html>

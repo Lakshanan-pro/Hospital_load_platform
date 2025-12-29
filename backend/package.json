@@ -1,0 +1,14 @@
+{
+  "name": "hospital-backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "express": "^4.22.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^7.6.0",
+    "mysql2": "^3.16.0",
+    "node-fetch": "^2.7.0"
+  }
+}

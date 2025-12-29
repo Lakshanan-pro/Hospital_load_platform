@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hospital Details</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 20px;
+  margin: 0;
+}
+
+.nav {
+  background: white;
+  padding: 15px 30px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.nav a {
+  color: #007bff;
+  text-decoration: none;
+  margin-right: 20px;
+  font-weight: 500;
+}
+
+.nav a:hover {
+  text-decoration: underline;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.error {
+  background: #fee;
+  color: #c33;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 2em;
+}
+
+.address {
+  color: #666;
+  margin-bottom: 20px;
+  font-size: 1.1em;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin: 30px 0;
+}
+
+.info-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.info-card h3 {
+  margin: 0 0 10px 0;
+  font-size: 0.9em;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.info-card .value {
+  font-size: 2em;
+  font-weight: bold;
+  margin: 0;
+}
+
+.crowd-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.9em;
+}
+
+.crowd-LOW {
+  background: #28a745;
+  color: white;
+}
+
+.crowd-MEDIUM {
+  background: #ffc107;
+  color: #333;
+}
+
+.crowd-HIGH {
+  background: #dc3545;
+  color: white;
+}
+
+.crowd-Unknown {
+  background: #6c757d;
+  color: white;
+}
+
+h2 {
+  color: #333;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 10px;
+}
+
+.departments-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.department-item {
+  background: #f8f9fa;
+  padding: 20px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border-left: 4px solid #667eea;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.2s;
+}
+
+.department-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.department-name {
+  font-weight: bold;
+  color: #333;
+  font-size: 1.1em;
+}
+
+.department-info {
+  text-align: right;
+}
+
+.last-updated {
+  color: #666;
+  font-size: 0.9em;
+  margin-top: 30px;
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid #ddd;
+}
+</style>
+</head>
+<body>
+<div class="nav">
+  <a href="index.html">← Home</a>
+  <a href="map.html">Map</a>
+</div>
+
+<div class="container">
+  <div id="loading" class="loading">Loading hospital details...</div>
+  <div id="error" class="error" style="display: none;"></div>
+  
+  <div id="content" style="display: none;">
+    <h1 id="hospitalName">Hospital Name</h1>
+    <p class="address" id="address"></p>
+    
+    <div id="selectedDepartmentHeader" style="display: none; background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 15px 20px; border-radius: 10px; margin: 20px 0;">
+      <strong>Selected Department: <span id="selectedDepartmentName"></span></strong>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <h3>Crowd Level</h3>
+        <p class="value" id="crowdLevel"></p>
+      </div>
+      <div class="info-card">
+        <h3>Estimated Wait</h3>
+        <p class="value" id="estimatedWait"></p>
+      </div>
+      <div class="info-card" id="distanceCard" style="display: none;">
+        <h3>Distance</h3>
+        <p class="value" id="distance"></p>
+      </div>
+    </div>
+
+    <h2>Department-wise Status</h2>
+    <ul class="departments-list" id="departments"></ul>
+    
+    <p class="last-updated" id="lastUpdated"></p>
+  </div>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+const department = params.get("department"); // Read department parameter from URL
+
+if (!id) {
+  document.getElementById("loading").style.display = "none";
+  document.getElementById("error").style.display = "block";
+  document.getElementById("error").textContent = "No hospital ID provided. Please select a hospital from the map.";
+} else {
+  async function loadHospital() {
+    try {
+      // Try to get user location for distance calculation
+      let url = `http://localhost:5000/api/hospitals/${id}`;
+      const urlParams = new URLSearchParams();
+      
+      if (department && department.trim() !== "") {
+        urlParams.append("department", department.trim());
+      }
+      
+      if (navigator.geolocation) {
+        try {
+          const position = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 3000 });
+          });
+          urlParams.append("lat", position.coords.latitude);
+          urlParams.append("lng", position.coords.longitude);
+        } catch (geoErr) {
+          console.log("Location not available for distance calculation");
+        }
+      }
+      
+      if (urlParams.toString()) {
+        url += `?${urlParams.toString()}`;
+      }
+
+      const res = await fetch(url);
+      
+      if (!res.ok) {
+        throw new Error(`Failed to load hospital: ${res.statusText}`);
+      }
+
+      const data = await res.json();
+
+      // Hide loading, show content
+      document.getElementById("loading").style.display = "none";
+      document.getElementById("content").style.display = "block";
+
+      // Populate hospital details
+      document.getElementById("hospitalName").textContent = data.name;
+
+      // Show selected department header if department is selected
+      if (department && department.trim() !== "" && data.selected_department) {
+        document.getElementById("selectedDepartmentHeader").style.display = "block";
+        document.getElementById("selectedDepartmentName").textContent = data.selected_department;
+      } else {
+        document.getElementById("selectedDepartmentHeader").style.display = "none";
+      }
+
+      // Display address (now comes from backend as user-friendly format)
+      const addressEl = document.getElementById("address");
+      if (data.address && String(data.address).trim() !== "") {
+        addressEl.textContent = data.address;
+      } else {
+        addressEl.textContent = "Address not available";
+      }
+      
+      // Crowd level with badge (handle Unknown status)
+      // If department is selected, show that department's crowd level
+      const crowdLevelEl = document.getElementById("crowdLevel");
+      if (data.crowd_level === "Unknown" || !data.crowd_level) {
+        crowdLevelEl.innerHTML = `<span class="crowd-badge" style="background: #6c757d; color: white; padding: 8px 16px; border-radius: 20px; font-weight: bold; text-transform: uppercase; font-size: 0.9em;">Unknown</span>`;
+      } else {
+        crowdLevelEl.innerHTML = `<span class="crowd-badge crowd-${data.crowd_level}">${data.crowd_level}</span>`;
+      }
+      
+      // Estimated wait (handle null/undefined)
+      // If department is selected, show that department's waiting time
+      if (data.estimated_wait !== null && data.estimated_wait !== undefined) {
+        document.getElementById("estimatedWait").textContent = `${data.estimated_wait} mins`;
+        document.getElementById("estimatedWait").style.color = "";
+      } else {
+        document.getElementById("estimatedWait").textContent = "Not Available";
+        document.getElementById("estimatedWait").style.color = "#666";
+      }
+      
+      // Distance (if available)
+      if (data.distance !== null && data.distance !== undefined) {
+        document.getElementById("distanceCard").style.display = "block";
+        document.getElementById("distance").textContent = `${data.distance.toFixed(2)} km`;
+      }
+
+      // Departments section
+      const deptList = document.getElementById("departments");
+      deptList.innerHTML = "";
+
+      // If a department was selected from URL parameter, show it prominently
+      if (department && department.trim() !== "" && data.selected_department) {
+        // Find the selected department in the departments array
+        const selectedDeptData = data.departments.find(d => 
+          d.name && d.name.toLowerCase() === department.trim().toLowerCase()
+        );
+        
+        if (selectedDeptData) {
+          // Show selected department with highlighted styling
+          const li = document.createElement("li");
+          li.className = "department-item";
+          li.style.borderLeft = "4px solid #28a745";
+          li.style.background = "#f0f9f0";
+
+          const deptName = document.createElement("div");
+          deptName.className = "department-name";
+          deptName.textContent = selectedDeptData.name;
+          deptName.style.fontWeight = "bold";
+          deptName.style.color = "#155724";
+
+          const deptInfo = document.createElement("div");
+          deptInfo.className = "department-info";
+          deptInfo.innerHTML = `
+            <span class="crowd-badge crowd-${selectedDeptData.crowd_level}">${selectedDeptData.crowd_level}</span><br>
+            <small style="color: #666; margin-top: 5px; display: block;">Wait: ${selectedDeptData.estimated_wait !== null && selectedDeptData.estimated_wait !== undefined ? selectedDeptData.estimated_wait + ' mins' : 'Not Available'}</small>
+            ${selectedDeptData.last_updated ? `<small style="color: #666; display: block; margin-top: 3px;">Updated: ${new Date(selectedDeptData.last_updated).toLocaleString()}</small>` : ''}
+          `;
+
+          li.appendChild(deptName);
+          li.appendChild(deptInfo);
+          deptList.appendChild(li);
+        } else {
+          // Department was requested but data doesn't exist
+          deptList.innerHTML = `<li style='color: #666; padding: 20px; text-align: center; background: #fff3cd; border-left: 4px solid #ffc107;'>
+            <strong>${department}</strong><br>
+            <small>Data not updated yet for this department</small>
+          </li>`;
+        }
+      }
+
+      // Show all departments (always show full list, with selected one highlighted if applicable)
+      if (data.departments && Array.isArray(data.departments) && data.departments.length > 0) {
+        // If department was selected and shown above, skip showing it again in the list
+        const deptToShow = data.departments.filter(d => {
+          if (department && department.trim() !== "") {
+            return d.name && d.name.toLowerCase() !== department.trim().toLowerCase();
+          }
+          return true;
+        });
+
+        deptToShow.forEach(d => {
+          const li = document.createElement("li");
+          li.className = "department-item";
+
+          const deptName = document.createElement("div");
+          deptName.className = "department-name";
+          deptName.textContent = d.name;
+
+          const deptInfo = document.createElement("div");
+          deptInfo.className = "department-info";
+          deptInfo.innerHTML = `
+            <span class="crowd-badge crowd-${d.crowd_level}">${d.crowd_level}</span><br>
+            <small style="color: #666; margin-top: 5px; display: block;">Wait: ${d.estimated_wait !== null && d.estimated_wait !== undefined ? d.estimated_wait + ' mins' : 'Not Available'}</small>
+            ${d.last_updated ? `<small style="color: #666; display: block; margin-top: 3px;">Updated: ${new Date(d.last_updated).toLocaleString()}</small>` : ''}
+          `;
+
+          li.appendChild(deptName);
+          li.appendChild(deptInfo);
+          deptList.appendChild(li);
+        });
+      } else if (!department || !data.selected_department) {
+        // Only show "No department data available" if no department was selected
+        deptList.innerHTML = "<li style='color: #666; padding: 20px; text-align: center;'>No department data available</li>";
+      }
+
+      // Last updated
+      if (data.last_updated) {
+        const date = new Date(data.last_updated);
+        document.getElementById("lastUpdated").textContent = 
+          `Last updated: ${date.toLocaleString()}`;
+      } else {
+        document.getElementById("lastUpdated").textContent = "";
+      }
+    } catch (err) {
+      console.error("Error loading hospital:", err);
+      document.getElementById("loading").style.display = "none";
+      document.getElementById("error").style.display = "block";
+      document.getElementById("error").textContent = 
+        `Error loading hospital details: ${err.message}. Please check if the backend server is running.`;
+    }
+  }
+
+  loadHospital();
+}
+</script>
+</body>
+</html>
