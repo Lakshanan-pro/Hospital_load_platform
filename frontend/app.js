@@ -31,28 +31,33 @@ if (document.getElementById("map")) {
     // Function to get marker color based on crowd level
     function getColor(crowdLevel) {
       switch (crowdLevel) {
-        case "LOW": return "green";
-        case "MEDIUM": return "orange";
-        case "HIGH": return "red";
-        case "Unknown": return "gray";
-        default: return "blue";
+        case "LOW": return "#2e7d32";
+        case "MEDIUM": return "#e65100";
+        case "HIGH": return "#c62828";
+        case "Unknown": return "#757575";
+        default: return "#3498db";
       }
     }
 
     // Function to format crowd level display
     function formatCrowdLevel(crowdLevel, estimatedWait) {
       if (crowdLevel === "Unknown") {
-        return '<span style="color: #666; font-weight: bold;">Unknown</span>';
+        return '<span style="color: #7f8c8d; font-weight: 600;">Unknown</span>';
       }
-      return `<span style="color: ${getColor(crowdLevel)}; font-weight: bold;">${crowdLevel}</span>`;
+      const colorMap = {
+        "LOW": "#2e7d32",
+        "MEDIUM": "#e65100",
+        "HIGH": "#c62828"
+      };
+      return `<span style="color: ${colorMap[crowdLevel] || '#3498db'}; font-weight: 600;">${crowdLevel}</span>`;
     }
 
     // Function to format waiting time display
     function formatWaitingTime(estimatedWait) {
       if (estimatedWait === null || estimatedWait === undefined) {
-        return '<span style="color: #666;">Not Available</span>';
+        return '<span style="color: #7f8c8d;">Not Available</span>';
       }
-      return `${estimatedWait} mins`;
+      return `<span style="color: #2c3e50; font-weight: 500;">${estimatedWait} mins</span>`;
     }
 
     // Get user live location with high accuracy
@@ -64,7 +69,7 @@ if (document.getElementById("map")) {
         // User marker with custom icon
         const userIcon = L.divIcon({
           className: "user-marker",
-          html: '<div style="background-color: #007bff; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 2px #007bff;"></div>',
+          html: '<div style="background-color: #3498db; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 2px #3498db;"></div>',
           iconSize: [20, 20],
           iconAnchor: [10, 10]
         });
@@ -122,15 +127,15 @@ if (document.getElementById("map")) {
 
           // Build popup content
           let popupContent = `
-            <div style="min-width: 200px;">
-              <b style="font-size: 1.1em;">${h.name}</b><br/>
-              <hr style="margin: 8px 0; border: none; border-top: 1px solid #ddd;">
-              <div style="margin: 5px 0;"><strong>Distance:</strong> ${distance.toFixed(2)} km</div>
-              <div style="margin: 5px 0;"><strong>Time to Reach:</strong> ~${timeToReach} mins</div>
-              <div style="margin: 5px 0;"><strong>Location:</strong> ${h.address || 'Address not available'}</div>
-              <hr style="margin: 8px 0; border: none; border-top: 1px solid #ddd;">
-              <div style="margin: 5px 0;"><strong>Crowd Level:</strong> ${formatCrowdLevel(h.crowd_level, h.estimated_wait)}</div>
-              <div style="margin: 5px 0;"><strong>Estimated Waiting:</strong> ${formatWaitingTime(h.estimated_wait)}</div>
+            <div style="min-width: 220px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+              <b style="font-size: 1.15em; color: #2c3e50;">${h.name}</b><br/>
+              <hr style="margin: 10px 0; border: none; border-top: 2px solid #e8eef3;">
+              <div style="margin: 8px 0; color: #2c3e50;"><strong style="color: #3498db;">Distance:</strong> ${distance.toFixed(2)} km</div>
+              <div style="margin: 8px 0; color: #2c3e50;"><strong style="color: #3498db;">Time to Reach:</strong> ~${timeToReach} mins</div>
+              <div style="margin: 8px 0; color: #2c3e50;"><strong style="color: #3498db;">Location:</strong> ${h.address || 'Address not available'}</div>
+              <hr style="margin: 10px 0; border: none; border-top: 2px solid #e8eef3;">
+              <div style="margin: 8px 0; color: #2c3e50;"><strong style="color: #3498db;">Crowd Level:</strong> ${formatCrowdLevel(h.crowd_level, h.estimated_wait)}</div>
+              <div style="margin: 8px 0; color: #2c3e50;"><strong style="color: #3498db;">Estimated Waiting:</strong> ${formatWaitingTime(h.estimated_wait)}</div>
           `;
 
           // Only show departments and "View Details" links if hospital has DB ID (matched in database)
@@ -138,8 +143,8 @@ if (document.getElementById("map")) {
             // Show departments if available
             if (h.departments && Array.isArray(h.departments) && h.departments.length > 0) {
               popupContent += `
-                <hr style="margin: 8px 0; border: none; border-top: 1px solid #ddd;">
-                <div style="margin: 5px 0;"><strong>Departments:</strong></div>
+                <hr style="margin: 10px 0; border: none; border-top: 2px solid #e8eef3;">
+                <div style="margin: 8px 0; color: #2c3e50;"><strong style="color: #3498db;">Departments:</strong></div>
               `;
               
               // Group departments by name (get latest entry for each department)
@@ -158,11 +163,11 @@ if (document.getElementById("map")) {
                 const deptWait = dept.estimated_wait !== null && dept.estimated_wait !== undefined ? dept.estimated_wait : null;
                 const encodedDeptName = encodeURIComponent(deptName);
                 popupContent += `
-                  <div style="margin: 5px 0;">
+                  <div style="margin: 8px 0; background: #fafbfc; padding: 8px 10px; border-radius: 6px; border: 1px solid #e8eef3;">
                     <a href="hospital.html?id=${h.id}&department=${encodedDeptName}" 
-                       style="color: #007bff; text-decoration: none; display: block; padding: 3px 0; border-bottom: 1px solid #eee;">
-                      <strong>${deptName}</strong><br>
-                      <small style="color: #666;">
+                       style="color: #3498db; text-decoration: none; display: block;">
+                      <strong style="color: #2c3e50;">${deptName}</strong><br>
+                      <small style="color: #7f8c8d;">
                         ${formatCrowdLevel(deptCrowdLevel, deptWait)} • 
                         ${formatWaitingTime(deptWait)}
                       </small>
@@ -174,12 +179,12 @@ if (document.getElementById("map")) {
             
             // Add general "View Details" link (without department filter)
             popupContent += `
-              <hr style="margin: 8px 0; border: none; border-top: 1px solid #ddd;">
-              <a href="hospital.html?id=${h.id}" style="color: #007bff; text-decoration: none; font-weight: bold; display: inline-block; margin-top: 5px;">View All Details →</a>
+              <hr style="margin: 10px 0; border: none; border-top: 2px solid #e8eef3;">
+              <a href="hospital.html?id=${h.id}" style="color: #3498db; text-decoration: none; font-weight: 600; display: inline-block; margin-top: 6px;">View All Details →</a>
             `;
           } else {
             popupContent += `
-              <div style="margin-top: 8px; font-size: 0.85em; color: #666; font-style: italic;">
+              <div style="margin-top: 10px; font-size: 0.85em; color: #7f8c8d; font-style: italic; background: #f8f9fa; padding: 8px; border-radius: 6px;">
                 No detailed information available
               </div>
             `;

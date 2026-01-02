@@ -14,17 +14,16 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #f5f7fa;
   min-height: 100vh;
-  padding: 20px;
+  padding: 0;
+  color: #2c3e50;
 }
 
 .nav {
   background: white;
-  padding: 15px 30px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  padding: 18px 30px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -33,188 +32,199 @@ body {
 .nav-left {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 25px;
 }
 
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 18px;
 }
 
 .nav a {
-  color: #007bff;
+  color: #3498db;
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.3s;
+  transition: color 0.3s ease;
 }
 
 .nav a:hover {
-  color: #0056b3;
-  text-decoration: underline;
+  color: #2980b9;
 }
 
 .user-info {
-  color: #666;
+  color: #7f8c8d;
   font-size: 0.9em;
 }
 
 .logout-btn {
-  background: #dc3545;
+  background: #e74c3c;
   color: white;
-  padding: 8px 16px;
+  padding: 9px 18px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-size: 0.9em;
-  transition: background 0.3s;
+  transition: background 0.3s ease, transform 0.2s ease;
+  font-weight: 500;
 }
 
 .logout-btn:hover {
-  background: #c82333;
+  background: #c0392b;
+  transform: translateY(-1px);
 }
 
 .container {
-  max-width: 900px;
-  margin: 0 auto;
+  max-width: 1000px;
+  margin: 30px auto;
   background: white;
-  border-radius: 15px;
-  padding: 40px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  border-radius: 12px;
+  padding: 45px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
 
 h1 {
-  color: #333;
-  margin-bottom: 10px;
-  font-size: 2.5em;
+  color: #2c3e50;
+  margin-bottom: 12px;
+  font-size: 2.3em;
+  font-weight: 600;
 }
 
 .subtitle {
-  color: #666;
-  margin-bottom: 30px;
-  font-size: 1.1em;
+  color: #7f8c8d;
+  margin-bottom: 35px;
+  font-size: 1.05em;
 }
 
 .hospital-select-section {
   background: #f8f9fa;
-  padding: 25px;
+  padding: 28px;
   border-radius: 10px;
-  margin-bottom: 30px;
-  border-left: 4px solid #667eea;
+  margin-bottom: 35px;
+  border-left: 4px solid #3498db;
+  border: 1px solid #e8eef3;
 }
 
 .hospital-select-section h2 {
-  color: #333;
-  margin-bottom: 15px;
-  font-size: 1.3em;
+  color: #2c3e50;
+  margin-bottom: 16px;
+  font-size: 1.35em;
+  font-weight: 600;
 }
 
 .hospital-select-section p {
-  color: #666;
-  margin-bottom: 20px;
+  color: #7f8c8d;
+  margin-bottom: 22px;
   font-size: 0.95em;
+  line-height: 1.6;
 }
 
 .form-group {
-  margin-bottom: 25px;
+  margin-bottom: 28px;
 }
 
 label {
   display: block;
-  margin-bottom: 8px;
-  color: #333;
+  margin-bottom: 10px;
+  color: #2c3e50;
   font-weight: 600;
   font-size: 0.95em;
 }
 
 select, input {
   width: 100%;
-  padding: 12px 15px;
-  border: 2px solid #e0e0e0;
+  padding: 13px 16px;
+  border: 2px solid #e8eef3;
   border-radius: 8px;
   font-size: 1em;
   font-family: inherit;
-  transition: border-color 0.3s;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background: white;
+  color: #2c3e50;
 }
 
 select:focus, input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
 }
 
 .crowd-levels {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-top: 10px;
+  gap: 12px;
+  margin-top: 12px;
 }
 
 .crowd-option {
-  padding: 15px;
-  border: 2px solid #e0e0e0;
+  padding: 18px 12px;
+  border: 2px solid #e8eef3;
   border-radius: 8px;
   text-align: center;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
   font-weight: 600;
+  background: white;
 }
 
 .crowd-option:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
 }
 
 .crowd-option.selected {
-  border-color: #667eea;
-  background: #667eea;
-  color: white;
+  border-color: #3498db;
+  background: #e3f2fd;
+  color: #1565c0;
 }
 
 .crowd-LOW {
-  border-color: #28a745;
+  border-color: #a5d6a7;
 }
 
 .crowd-LOW.selected {
-  background: #28a745;
-  border-color: #28a745;
+  background: #e8f5e9;
+  border-color: #66bb6a;
+  color: #2e7d32;
 }
 
 .crowd-MEDIUM {
-  border-color: #ffc107;
+  border-color: #ffcc80;
 }
 
 .crowd-MEDIUM.selected {
-  background: #ffc107;
-  border-color: #ffc107;
-  color: #333;
+  background: #fff3e0;
+  border-color: #ffa726;
+  color: #e65100;
 }
 
 .crowd-HIGH {
-  border-color: #dc3545;
+  border-color: #ef9a9a;
 }
 
 .crowd-HIGH.selected {
-  background: #dc3545;
-  border-color: #dc3545;
+  background: #ffebee;
+  border-color: #ef5350;
+  color: #c62828;
 }
 
 .btn-submit, .btn-link {
   width: 100%;
-  padding: 15px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 16px;
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 1.1em;
+  font-size: 1.05em;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
-  margin-top: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-top: 24px;
 }
 
 .btn-submit:hover:not(:disabled), .btn-link:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
 }
 
 .btn-submit:disabled, .btn-link:disabled {
@@ -223,70 +233,79 @@ select:focus, input:focus {
 }
 
 .alert {
-  padding: 15px;
+  padding: 16px 20px;
   border-radius: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   display: none;
+  font-weight: 500;
 }
 
 .alert-success {
-  background: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #a5d6a7;
+  border-left: 4px solid #66bb6a;
 }
 
 .alert-error {
-  background: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #ef9a9a;
+  border-left: 4px solid #ef5350;
 }
 
 .current-hospital {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 20px;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  color: #0d47a1;
+  padding: 24px 28px;
   border-radius: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 35px;
+  border: 2px solid #90caf9;
 }
 
 .current-hospital h2 {
-  margin: 0 0 10px 0;
+  margin: 0 0 8px 0;
   font-size: 1.5em;
+  font-weight: 600;
+  color: #0d47a1;
 }
 
 .current-hospital p {
   margin: 0;
   opacity: 0.9;
-  font-size: 1.1em;
+  font-size: 1.05em;
 }
 
 .department-status-section {
-  margin-top: 40px;
-  padding-top: 30px;
-  border-top: 2px solid #e0e0e0;
+  margin-top: 45px;
+  padding-top: 35px;
+  border-top: 2px solid #e8eef3;
 }
 
 .department-status-section h2 {
-  color: #333;
-  margin-bottom: 10px;
+  color: #2c3e50;
+  margin-bottom: 12px;
   font-size: 1.5em;
+  font-weight: 600;
 }
 
 .department-status-item {
-  background: #f8f9fa;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  border-left: 4px solid #667eea;
+  background: #fafbfc;
+  padding: 22px 24px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  border-left: 4px solid #3498db;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: transform 0.2s;
+  transition: all 0.3s ease;
+  border: 1px solid #e8eef3;
 }
 
 .department-status-item:hover {
-  transform: translateX(5px);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transform: translateX(8px);
+  box-shadow: 0 4px 16px rgba(52, 152, 219, 0.12);
+  background: white;
 }
 
 .department-status-info {
@@ -294,75 +313,82 @@ select:focus, input:focus {
 }
 
 .department-status-name {
-  font-weight: bold;
-  color: #333;
-  font-size: 1.1em;
-  margin-bottom: 8px;
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 1.15em;
+  margin-bottom: 10px;
 }
 
 .department-status-details {
   display: flex;
   gap: 20px;
   align-items: center;
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
 .department-status-badge {
   display: inline-block;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-weight: bold;
+  padding: 7px 14px;
+  border-radius: 24px;
+  font-weight: 600;
   text-transform: uppercase;
-  font-size: 0.85em;
+  font-size: 0.8em;
+  letter-spacing: 0.5px;
 }
 
 .department-status-badge.LOW {
-  background: #28a745;
-  color: white;
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #a5d6a7;
 }
 
 .department-status-badge.MEDIUM {
-  background: #ffc107;
-  color: #333;
+  background: #fff3e0;
+  color: #e65100;
+  border: 1px solid #ffcc80;
 }
 
 .department-status-badge.HIGH {
-  background: #dc3545;
-  color: white;
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #ef9a9a;
 }
 
 .department-status-time {
-  color: #666;
+  color: #7f8c8d;
   font-size: 0.9em;
   text-align: right;
 }
 
 .recent-submissions {
-  margin-top: 40px;
-  padding-top: 30px;
-  border-top: 2px solid #e0e0e0;
+  margin-top: 45px;
+  padding-top: 35px;
+  border-top: 2px solid #e8eef3;
 }
 
 .recent-submissions h2 {
-  color: #333;
-  margin-bottom: 20px;
+  color: #2c3e50;
+  margin-bottom: 24px;
   font-size: 1.5em;
+  font-weight: 600;
 }
 
 .submission-item {
-  background: #f8f9fa;
-  padding: 15px;
-  border-radius: 8px;
-  margin-bottom: 10px;
+  background: #fafbfc;
+  padding: 18px 20px;
+  border-radius: 10px;
+  margin-bottom: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: transform 0.2s;
+  transition: all 0.3s ease;
+  border: 1px solid #e8eef3;
 }
 
 .submission-item:hover {
-  transform: translateX(5px);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transform: translateX(6px);
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+  background: white;
 }
 
 .submission-info {
@@ -370,12 +396,77 @@ select:focus, input:focus {
 }
 
 .submission-time {
-  color: #666;
+  color: #7f8c8d;
   font-size: 0.9em;
 }
 
 .hidden {
   display: none;
+}
+
+/* Mobile responsive design */
+@media (max-width: 768px) {
+  .nav {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px 20px;
+  }
+  
+  .nav-left, .nav-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .container {
+    margin: 20px 15px;
+    padding: 30px 20px;
+    border-radius: 10px;
+  }
+  
+  h1 {
+    font-size: 1.9em;
+  }
+  
+  .crowd-levels {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .department-status-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .department-status-time {
+    text-align: left;
+  }
+  
+  .submission-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .department-status-item:hover,
+  .submission-item:hover {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    margin: 10px;
+    padding: 20px 15px;
+  }
+  
+  h1 {
+    font-size: 1.6em;
+  }
+  
+  .subtitle {
+    font-size: 0.95em;
+  }
 }
 </style>
 </head>
@@ -680,8 +771,8 @@ function addRecentSubmission(submission) {
   item.className = 'submission-item';
   item.innerHTML = `
     <div class="submission-info">
-      <strong>${submission.hospital}</strong> - ${submission.department}<br>
-      <span class="crowd-badge crowd-${submission.crowdLevel}" style="display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.85em; margin-top: 5px; background: ${submission.crowdLevel === 'LOW' ? '#28a745' : submission.crowdLevel === 'MEDIUM' ? '#ffc107' : '#dc3545'}; color: ${submission.crowdLevel === 'MEDIUM' ? '#333' : 'white'};">
+      <strong style="color: #2c3e50;">${submission.hospital}</strong> - ${submission.department}<br>
+      <span style="display: inline-block; padding: 5px 10px; border-radius: 16px; font-size: 0.8em; margin-top: 8px; font-weight: 600; letter-spacing: 0.5px; background: ${submission.crowdLevel === 'LOW' ? '#e8f5e9' : submission.crowdLevel === 'MEDIUM' ? '#fff3e0' : '#ffebee'}; color: ${submission.crowdLevel === 'LOW' ? '#2e7d32' : submission.crowdLevel === 'MEDIUM' ? '#e65100' : '#c62828'}; border: 1px solid ${submission.crowdLevel === 'LOW' ? '#a5d6a7' : submission.crowdLevel === 'MEDIUM' ? '#ffcc80' : '#ef9a9a'};">
         ${submission.crowdLevel} • ${submission.estimatedWait} mins wait
       </span>
     </div>

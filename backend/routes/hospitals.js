@@ -361,75 +361,26 @@ router.post("/:id/load", async (req, res) => {
     }
 
     // Check if record exists for this hospital + department combination
-    // Handle different column names dynamically
-    let existing = [];
-    let deptColumn = 'department'; // Default column name
-    
-    // First, try to find department column name
-    try {
-      const [columns] = await pool.query("SHOW COLUMNS FROM hospital_load");
-      const deptCol = columns.find(col => 
-        col.Field.toLowerCase().includes('dept') || 
-        col.Field.toLowerCase() === 'department'
-      );
-      if (deptCol) {
-        deptColumn = deptCol.Field;
-      }
-    } catch (err) {
-      console.warn("Could not check columns, will try default 'department':", err.message);
-    }
-
-    // Check if record exists for this specific hospital_id + department combination
-    try {
-      [existing] = await pool.query(
-        `SELECT id FROM hospital_load WHERE hospital_id = ? AND ${deptColumn} = ?`,
-        [id, department]
-      );
-    } catch (err) {
-      // If query fails (column might not exist), try without department filter as fallback
-      console.warn("Query with department filter failed, trying without:", err.message);
-      [existing] = await pool.query(
-        "SELECT id FROM hospital_load WHERE hospital_id = ?",
-        [id]
-      );
-    }
+    const [existing] = await pool.query(
+      `SELECT id FROM hospital_load WHERE hospital_id = ? AND department = ?`,
+      [id, department]
+    );
 
     if (existing.length > 0) {
       // UPDATE existing record for this hospital + department combination
-      try {
-        await pool.query(
-          `UPDATE hospital_load 
-           SET crowd_level = ?, estimated_wait = ?, updated_at = NOW()
-           WHERE hospital_id = ? AND ${deptColumn} = ?`,
-          [crowd_level, parseInt(estimated_wait), id, department]
-        );
-      } catch (updateErr) {
-        // If update with department filter fails, try without
-        console.warn("Update with department filter failed, trying without:", updateErr.message);
-        await pool.query(
-          `UPDATE hospital_load 
-           SET crowd_level = ?, estimated_wait = ?, updated_at = NOW()
-           WHERE hospital_id = ? LIMIT 1`,
-          [crowd_level, parseInt(estimated_wait), id]
-        );
-      }
+      await pool.query(
+        `UPDATE hospital_load 
+         SET crowd_level = ?, estimated_wait = ?, updated_at = NOW()
+         WHERE hospital_id = ? AND department = ?`,
+        [crowd_level, parseInt(estimated_wait), id, department]
+      );
     } else {
       // INSERT new record for this hospital + department combination
-      try {
-        await pool.query(
-          `INSERT INTO hospital_load (hospital_id, ${deptColumn}, crowd_level, estimated_wait, updated_at)
-           VALUES (?, ?, ?, ?, NOW())`,
-          [id, department, crowd_level, parseInt(estimated_wait)]
-        );
-      } catch (insertErr) {
-        // If insert with department fails, try without department column
-        console.warn("Insert with department column failed, trying without:", insertErr.message);
-        await pool.query(
-          `INSERT INTO hospital_load (hospital_id, crowd_level, estimated_wait, updated_at)
-           VALUES (?, ?, ?, NOW())`,
-          [id, crowd_level, parseInt(estimated_wait)]
-        );
-      }
+      await pool.query(
+        `INSERT INTO hospital_load (hospital_id, department, crowd_level, estimated_wait, updated_at)
+         VALUES (?, ?, ?, ?, NOW())`,
+        [id, department, crowd_level, parseInt(estimated_wait)]
+      );
     }
 
     res.json({ 

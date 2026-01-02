@@ -6,66 +6,84 @@
 <title>Hospital Details</title>
 <link rel="stylesheet" href="style.css">
 <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #f5f7fa;
   min-height: 100vh;
-  padding: 20px;
+  padding: 0;
   margin: 0;
+  color: #2c3e50;
 }
 
 .nav {
   background: white;
-  padding: 15px 30px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  padding: 18px 30px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin-bottom: 30px;
 }
 
 .nav a {
-  color: #007bff;
+  color: #3498db;
   text-decoration: none;
-  margin-right: 20px;
+  margin-right: 25px;
   font-weight: 500;
+  transition: color 0.3s ease;
 }
 
 .nav a:hover {
-  text-decoration: underline;
+  color: #2980b9;
 }
 
 .container {
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
   background: white;
-  border-radius: 15px;
-  padding: 30px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
 
 .loading {
   text-align: center;
-  padding: 40px;
-  color: #666;
+  padding: 60px 20px;
+  color: #7f8c8d;
+  font-size: 1.1em;
 }
 
 .error {
-  background: #fee;
-  color: #c33;
-  padding: 15px;
+  background: #ffebee;
+  color: #c62828;
+  padding: 16px 20px;
   border-radius: 8px;
   margin: 20px 0;
+  border-left: 4px solid #c62828;
 }
 
 h1 {
-  color: #333;
-  margin-bottom: 10px;
-  font-size: 2em;
+  color: #2c3e50;
+  margin-bottom: 12px;
+  font-size: 2.2em;
+  font-weight: 600;
 }
 
 .address {
-  color: #666;
-  margin-bottom: 20px;
-  font-size: 1.1em;
+  color: #7f8c8d;
+  margin-bottom: 30px;
+  font-size: 1.05em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.address::before {
+  content: "📍";
+  font-size: 1.2em;
 }
 
 .info-grid {
@@ -76,62 +94,78 @@ h1 {
 }
 
 .info-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 20px;
-  border-radius: 10px;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  color: #1565c0;
+  padding: 24px;
+  border-radius: 12px;
   text-align: center;
+  border: 1px solid #90caf9;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(33, 150, 243, 0.15);
 }
 
 .info-card h3 {
-  margin: 0 0 10px 0;
-  font-size: 0.9em;
-  opacity: 0.9;
+  margin: 0 0 12px 0;
+  font-size: 0.85em;
+  opacity: 0.85;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
+  font-weight: 600;
 }
 
 .info-card .value {
   font-size: 2em;
-  font-weight: bold;
+  font-weight: 700;
   margin: 0;
+  color: #0d47a1;
 }
 
 .crowd-badge {
   display: inline-block;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-weight: bold;
+  padding: 8px 18px;
+  border-radius: 24px;
+  font-weight: 600;
   text-transform: uppercase;
-  font-size: 0.9em;
+  font-size: 0.85em;
+  letter-spacing: 0.5px;
 }
 
 .crowd-LOW {
-  background: #28a745;
-  color: white;
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #a5d6a7;
 }
 
 .crowd-MEDIUM {
-  background: #ffc107;
-  color: #333;
+  background: #fff3e0;
+  color: #e65100;
+  border: 1px solid #ffcc80;
 }
 
 .crowd-HIGH {
-  background: #dc3545;
-  color: white;
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #ef9a9a;
 }
 
 .crowd-Unknown {
-  background: #6c757d;
-  color: white;
+  background: #f5f5f5;
+  color: #616161;
+  border: 1px solid #e0e0e0;
 }
 
 h2 {
-  color: #333;
-  margin-top: 40px;
-  margin-bottom: 20px;
-  border-bottom: 2px solid #667eea;
-  padding-bottom: 10px;
+  color: #2c3e50;
+  margin-top: 45px;
+  margin-bottom: 24px;
+  font-size: 1.6em;
+  font-weight: 600;
+  padding-bottom: 12px;
+  border-bottom: 3px solid #e3f2fd;
 }
 
 .departments-list {
@@ -141,26 +175,28 @@ h2 {
 }
 
 .department-item {
-  background: #f8f9fa;
-  padding: 20px;
-  margin: 10px 0;
+  background: #fafbfc;
+  padding: 22px 24px;
+  margin: 14px 0;
   border-radius: 10px;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid #3498db;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: transform 0.2s;
+  transition: all 0.3s ease;
+  border: 1px solid #e8eef3;
 }
 
 .department-item:hover {
-  transform: translateX(5px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transform: translateX(8px);
+  box-shadow: 0 4px 16px rgba(52, 152, 219, 0.12);
+  background: white;
 }
 
 .department-name {
-  font-weight: bold;
-  color: #333;
-  font-size: 1.1em;
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 1.15em;
 }
 
 .department-info {
@@ -168,12 +204,97 @@ h2 {
 }
 
 .last-updated {
-  color: #666;
+  color: #95a5a6;
   font-size: 0.9em;
-  margin-top: 30px;
+  margin-top: 40px;
   text-align: center;
-  padding-top: 20px;
-  border-top: 1px solid #ddd;
+  padding-top: 25px;
+  border-top: 1px solid #ecf0f1;
+}
+
+/* Mobile responsive design */
+@media (max-width: 768px) {
+  body {
+    padding: 0;
+  }
+  
+  .nav {
+    padding: 15px 20px;
+    margin-bottom: 20px;
+  }
+  
+  .nav a {
+    margin-right: 15px;
+    font-size: 0.95em;
+  }
+  
+  .container {
+    padding: 25px 20px;
+    border-radius: 0;
+    margin: 0;
+  }
+  
+  h1 {
+    font-size: 1.8em;
+  }
+  
+  .address {
+    font-size: 0.95em;
+  }
+  
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin: 20px 0;
+  }
+  
+  .info-card {
+    padding: 20px;
+  }
+  
+  .info-card .value {
+    font-size: 1.8em;
+  }
+  
+  h2 {
+    font-size: 1.4em;
+    margin-top: 35px;
+  }
+  
+  .department-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 18px 16px;
+  }
+  
+  .department-info {
+    text-align: left;
+    width: 100%;
+  }
+  
+  .department-item:hover {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .nav {
+    padding: 12px 15px;
+  }
+  
+  .nav a {
+    display: inline-block;
+    margin-bottom: 5px;
+  }
+  
+  h1 {
+    font-size: 1.5em;
+  }
+  
+  .container {
+    padding: 20px 15px;
+  }
 }
 </style>
 </head>
@@ -191,8 +312,8 @@ h2 {
     <h1 id="hospitalName">Hospital Name</h1>
     <p class="address" id="address"></p>
     
-    <div id="selectedDepartmentHeader" style="display: none; background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 15px 20px; border-radius: 10px; margin: 20px 0;">
-      <strong>Selected Department: <span id="selectedDepartmentName"></span></strong>
+    <div id="selectedDepartmentHeader" style="display: none; background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); color: #1b5e20; padding: 18px 24px; border-radius: 10px; margin: 20px 0; border: 2px solid #81c784; box-shadow: 0 2px 10px rgba(76, 175, 80, 0.15);">
+      <strong style="font-size: 1.05em;">Selected Department: <span id="selectedDepartmentName"></span></strong>
     </div>
 
     <div class="info-grid">
